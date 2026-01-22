@@ -32,6 +32,7 @@ public class pmsController
 	@GetMapping("/get")
 	public List<Product> getdata()
 	{
+		
 		return ps.getData();
 	}
 	@GetMapping("/getjenkins")
