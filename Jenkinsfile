@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk'
+        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64' // Use your Java 17 path
         PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
-        HOME = '/var/snap/jenkins/common' // Snap Jenkins home
+        HOME = '/var/snap/jenkins/common'                 // Required for mvnw
     }
 
     stages {
