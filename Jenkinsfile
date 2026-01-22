@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        // Optional: specify JAVA_HOME if needed
         JAVA_HOME = '/usr/lib/jvm/java-17-openjdk'
         PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
+        HOME = '/var/snap/jenkins/common' // Snap Jenkins home
     }
 
     stages {
@@ -32,7 +32,6 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running tests (optional, continue on failure)...'
-                // Use || true so pipeline does not fail if tests fail
                 sh './mvnw test || true'
             }
         }
@@ -47,7 +46,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying ProductManagementSystem...'
-                // Example: restart systemd service, replace with your service name
                 sh 'sudo systemctl restart springboot-app || echo "Deployment skipped or failed"'
             }
         }
