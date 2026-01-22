@@ -34,6 +34,11 @@ public class pmsController
 	{
 		return ps.getData();
 	}
+	@GetMapping("/getjenkins")
+	public String getjenkins()
+	{
+		return "Hi , jenkins worked";
+	}
 	@GetMapping("/get/{id}")
 	public Product getDataById(@PathVariable Long id) {
 	    return ps.getDataById(id);
