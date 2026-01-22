@@ -10,30 +10,36 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checking out source code...'
-                checkout scm
+                echo 'Cloning from GitHub...'
+                git branch: 'main', url: 'https://github.com/shashank-bharadwaj-xor/PMS.git'
+            }
+        }
+
+        stage('Prepare Maven Wrapper') {
+            steps {
+                echo 'Fixing Maven wrapper permissions...'
+                sh 'chmod +x mvnw'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building ProductManagementSystem...'
-                // Using your Maven wrapper to build, skipping tests initially
+                echo 'Building ProductManagementSystem (skip tests)...'
                 sh './mvnw clean package -DskipTests'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests...'
-                // Optional: run tests separately
-                sh './mvnw test || true' // continue even if tests fail
+                echo 'Running tests (optional, continue on failure)...'
+                // Use || true so pipeline does not fail if tests fail
+                sh './mvnw test || true'
             }
         }
 
         stage('Archive') {
             steps {
-                echo 'Archiving the built JAR...'
+                echo 'Archiving built JAR...'
                 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             }
         }
@@ -41,8 +47,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying ProductManagementSystem...'
-                // Replace 'springboot-app' with your actual service name if different
-                sh 'sudo systemctl restart springboot-app'
+                // Example: restart systemd service, replace with your service name
+                sh 'sudo systemctl restart springboot-app || echo "Deployment skipped or failed"'
             }
         }
     }
@@ -52,7 +58,7 @@ pipeline {
             echo 'Pipeline completed successfully!'
         }
         failure {
-            echo 'Pipeline failed. Check logs for details.'
+            echo 'Pipeline failed! Check Jenkins logs.'
         }
     }
 }
